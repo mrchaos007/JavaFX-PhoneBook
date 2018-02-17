@@ -10,8 +10,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -22,7 +25,7 @@ public class ViewController implements Initializable {
     @FXML
     TextField inputLastname;
     @FXML
-    TextField inputFirstName;
+    TextField inputFirstname;
     @FXML
     TextField inputEmail;
     @FXML
@@ -40,14 +43,27 @@ public class ViewController implements Initializable {
             new Person("Bourne", "Jason", "gyuszi.teszt@example.com"),
             new Person("Scott", "Michael", "thatswahtshesaid@example.com"));
     
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-
-    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        TableColumn lastNameCol = new TableColumn("Vezetéknév");
+        lastNameCol.setMinWidth(100);
+        lastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("lastName")); // Person objektumban keresd a lastName-et, String-ként jelenítjük meg
+        
+        TableColumn firstNameCol = new TableColumn("Keresztnév");
+        firstNameCol.setMinWidth(100);
+        firstNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("firstName"));
+        
+        TableColumn emailCol = new TableColumn("Email cím");
+        emailCol.setMinWidth(200);
+        emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        emailCol.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
+        
+        table.getColumns().addAll(lastNameCol, firstNameCol, emailCol);
+        table.setItems(data);
+        
     }    
     
 }
