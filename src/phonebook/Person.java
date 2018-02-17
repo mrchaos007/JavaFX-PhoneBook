@@ -24,19 +24,25 @@ public class Person {
     public String getFirstName() {
         return firstName.get();
     }
+    
+    void setFirstName(String firstName) {
+        this.firstName.set(firstName);
+    }
 
     public String getLastName() {
         return lastName.get();
+    }
+    
+    void setLastName(String lastName) {
+        this.lastName.set(lastName);
     }
 
     public String getEmail() {
         return email.get();
     }
     
-    
-    
-    
-    
-    
+    void setEmail(String email) {
+        this.email.set(email);
+    }
     
 }
