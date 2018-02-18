@@ -24,7 +24,7 @@
                <children>
                   <Pane id="exportPane" fx:id="exportPane" layoutX="158.0" layoutY="70.0" prefHeight="598.0" prefWidth="441.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button id="exportButton" fx:id="exportButton" layoutX="178.0" layoutY="157.0" mnemonicParsing="false" text="PDF mentése" />
+                        <Button id="exportButton" fx:id="exportButton" onAction="#exportList" layoutX="178.0" layoutY="157.0" mnemonicParsing="false" text="PDF mentése" />
                         <TextField id="inputExportName" fx:id="inputExportName" layoutX="104.0" layoutY="113.0" prefHeight="25.0" prefWidth="234.0" />
                         <Label layoutX="192.0" layoutY="85.0" prefHeight="17.0" prefWidth="57.0" text="Fájl neve:" />
                         <Label layoutX="143.0" layoutY="34.0" text="Exportálás PDF-be">
