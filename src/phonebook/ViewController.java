@@ -3,11 +3,14 @@ package phonebook;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -16,6 +19,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -37,6 +42,12 @@ public class ViewController implements Initializable {
     Pane contactPane;
     @FXML
     Pane exportPane;
+    
+    private final String MENU_CONTACT = "Kontaktok";
+    private final String MENU_LIST = "Lista";
+    private final String MENU_EXPORT = "Exportálás";
+    private final String MENU_EXIT = "Kilépés";
+
     
     private final ObservableList<Person> data = 
             FXCollections.observableArrayList(
@@ -103,16 +114,40 @@ public class ViewController implements Initializable {
         TreeView<String> treeView = new TreeView<>(treeItemRoot1);
         treeView.setShowRoot(false);
         
-        TreeItem<String> nodeItemA = new TreeItem<>("Kontaktok");
-        TreeItem<String> nodeItemB = new TreeItem<>("Kilépés");
+        TreeItem<String> nodeItemA = new TreeItem<>(MENU_CONTACT);
+        TreeItem<String> nodeItemB = new TreeItem<>(MENU_EXIT);
         
-        TreeItem<String> nodeItemA1 = new TreeItem<>("Lista");
-        TreeItem<String> nodeItemA2 = new TreeItem<>("Exportálás");
+        //nodeItemA.setExpanded(true);
+        
+        Node contactsNode = new ImageView(new Image(getClass().getResourceAsStream("/contacts.png")));
+        Node exportNode = new ImageView(new Image(getClass().getResourceAsStream("/export.png")));
+        TreeItem<String> nodeItemA1 = new TreeItem<>(MENU_LIST, contactsNode);
+        TreeItem<String> nodeItemA2 = new TreeItem<>(MENU_EXPORT, exportNode);
         
         nodeItemA.getChildren().addAll(nodeItemA1, nodeItemA2);
         treeItemRoot1.getChildren().addAll(nodeItemA, nodeItemB);
         
         menuPane.getChildren().add(treeView);
+        
+        treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                TreeItem<String> selectedItem = (TreeItem<String>) newValue;
+                String selectedMenu;
+                selectedMenu = selectedItem.getValue();
+                
+                if (null != selectedMenu) {
+                    switch (selectedMenu) {
+                        case MENU_CONTACT:
+                            selectedItem.setExpanded(true);
+                            break;
+                        case MENU_EXIT:
+                            System.exit(0);
+                            break;
+                    }
+                }
+            }
+        } );
     }
     
     @Override
