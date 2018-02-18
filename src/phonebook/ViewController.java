@@ -1,8 +1,15 @@
 
 package phonebook;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -174,12 +181,16 @@ public class ViewController implements Initializable {
         } );
     }
     
+    
+
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setTableData();
         setMenuData();
+        PdfGeneration pdfCreator = new PdfGeneration();
+        pdfCreator.pdfGeneration("fajlnev", "tartalom");
     }    
-
 
     
 }
