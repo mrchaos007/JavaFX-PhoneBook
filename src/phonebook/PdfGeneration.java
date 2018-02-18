@@ -23,24 +23,30 @@ public class PdfGeneration {
         Document document = new Document();
         
         try {
+            // Céges logó
             PdfWriter.getInstance(document, new FileOutputStream(fileName + ".pdf"));
             document.open();
             Image image1 = Image.getInstance(getClass().getResource("/logo.jpg"));
-            image1.scaleToFit(200, 86);
-            image1.setAbsolutePosition(200f, 750f);
+            image1.scaleToFit(400, 172);
+            image1.setAbsolutePosition(170f, 650f);
             document.add(image1);
             
-            float[] columnWidths = {3, 3, 4};
+            // Sortörések
+            document.add(new Paragraph("\n\n\n\n\n\n\n\n\n\n"));
+            
+            // Táblázat
+            float[] columnWidths = {2, 4, 4, 6};
             PdfPTable table = new PdfPTable(columnWidths);
             table.setWidthPercentage(100);
             PdfPCell cell = new PdfPCell(new Phrase("KontaktLista"));
             cell.setBackgroundColor(GrayColor.GRAYWHITE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setColspan(3);
+            cell.setColspan(4);
             table.addCell(cell);
             
             table.getDefaultCell().setBackgroundColor(new GrayColor(0.75f));
-            table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell("Sorszám");
             table.addCell("Vezetéknév");
             table.addCell("Keresztnév");
             table.addCell("E-mail cím");
@@ -49,14 +55,18 @@ public class PdfGeneration {
             table.getDefaultCell().setBackgroundColor(GrayColor.GRAYWHITE);
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             
-            for (int counter = 1; counter < 10; counter++) {
-                table.addCell(String.valueOf(counter));
-                table.addCell("key " + counter);
-                table.addCell("value " + counter);
+            for (int i=0; i < data.size(); i++) {
+                Person person = data.get(i);
+                
+                table.addCell(" " + (i+1));
+                table.addCell(person.getLastName());
+                table.addCell(person.getFirstName());
+                table.addCell(person.getEmail());
             }
             
             document.add(table);
             
+            // Aláírás
             Chunk signature = new Chunk("\n\n Generálva a Telefonkönyv alkalmazás segítségével.");
             // c.setBackground(BaseColor.BLUE);
             Paragraph base = new Paragraph(signature);  
