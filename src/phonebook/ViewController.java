@@ -53,23 +53,23 @@ public class ViewController implements Initializable {
     TextField inputExportName;
     @FXML
     Button exportButton;
+    
+    DB db = new DB();
 
     private final String MENU_CONTACT = "Kontaktok";
     private final String MENU_LIST = "Lista";
     private final String MENU_EXPORT = "Exportálás";
     private final String MENU_EXIT = "Kilépés";
 
-    private final ObservableList<Person> data
-            = FXCollections.observableArrayList(
-                    new Person("Szabó", "Gyula", "gyuszi.teszt@example.com"),
-                    new Person("Bourne", "Jason", "gyuszi.teszt@example.com"),
-                    new Person("Scott", "Michael", "thatswahtshesaid@example.com"));
+    private final ObservableList<Person> data = FXCollections.observableArrayList();
 
     @FXML
     private void addContact(ActionEvent event) {
         String email = inputEmail.getText();
         if (email.length() > 3 && email.contains("@") && email.contains(".")) {
-            data.add(new Person(inputLastname.getText(), inputFirstname.getText(), email));
+            Person newPerson = new Person(inputLastname.getText(), inputFirstname.getText(), email);
+            data.add(newPerson);
+            db.addContact(newPerson);
             inputLastname.clear();
             inputFirstname.clear();
             inputEmail.clear();
@@ -133,6 +133,9 @@ public class ViewController implements Initializable {
         );
 
         table.getColumns().addAll(lastNameCol, firstNameCol, emailCol);
+        
+        data.addAll(db.getAllContacts());
+                
         table.setItems(data);
     }
 

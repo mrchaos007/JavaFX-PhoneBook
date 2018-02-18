@@ -36,6 +36,9 @@
                   <Pane id="contactPane" fx:id="contactPane" layoutX="168.0" layoutY="80.0" prefHeight="598.0" prefWidth="441.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <TableView id="table" fx:id="table" editable="true" prefHeight="455.0" prefWidth="441.0">
+                          <placeholder>
+                            <Label text="Nincs adat."/>
+                          </placeholder>
                           <columns>
                           </columns>
                         </TableView>
