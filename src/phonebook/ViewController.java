@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,6 +43,10 @@ public class ViewController implements Initializable {
     Pane contactPane;
     @FXML
     Pane exportPane;
+    @FXML
+    TextField inputExportName;
+    @FXML
+    Button exportButton;
     
     private final String MENU_CONTACT = "Kontaktok";
     private final String MENU_LIST = "Lista";
@@ -55,6 +60,17 @@ public class ViewController implements Initializable {
             new Person("Bourne", "Jason", "gyuszi.teszt@example.com"),
             new Person("Scott", "Michael", "thatswahtshesaid@example.com"));
     
+    @FXML
+    private void addContact(ActionEvent event) {
+        String email = inputEmail.getText();
+        if(email.length() > 3 && email.contains("@") && email.contains(".")) {
+            data.add(new Person(inputLastname.getText(), inputFirstname.getText(), email));
+            inputLastname.clear();
+            inputFirstname.clear();
+            inputEmail.clear();
+        }
+        
+    }
     
     public void setTableData() {
         TableColumn lastNameCol = new TableColumn("Vezetéknév");
@@ -139,7 +155,15 @@ public class ViewController implements Initializable {
                 if (null != selectedMenu) {
                     switch (selectedMenu) {
                         case MENU_CONTACT:
-                            selectedItem.setExpanded(true);
+                            selectedItem.setExpanded(!selectedItem.isExpanded());
+                            break;
+                        case MENU_LIST:
+                            contactPane.setVisible(true);
+                            exportPane.setVisible(false);
+                            break;
+                        case MENU_EXPORT:
+                            contactPane.setVisible(false);
+                            exportPane.setVisible(true);
                             break;
                         case MENU_EXIT:
                             System.exit(0);
