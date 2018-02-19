@@ -22,6 +22,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -35,6 +36,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 public class ViewController implements Initializable {
 
@@ -62,7 +64,7 @@ public class ViewController implements Initializable {
     TextField inputExportName;
     @FXML
     Button exportButton;
-    
+
     DB db = new DB();
 
     private final String MENU_CONTACT = "Kontaktok";
@@ -101,7 +103,7 @@ public class ViewController implements Initializable {
 
     public void setTableData() {
         TableColumn lastNameCol = new TableColumn("Vezetéknév");
-        lastNameCol.setMinWidth(100);
+        lastNameCol.setMinWidth(130);
         lastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
         lastNameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("lastName")); // Person objektumban keresd a lastName-et, String-ként jelenítjük meg
 
@@ -117,7 +119,7 @@ public class ViewController implements Initializable {
         );
 
         TableColumn firstNameCol = new TableColumn("Keresztnév");
-        firstNameCol.setMinWidth(100);
+        firstNameCol.setMinWidth(130);
         firstNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
         firstNameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("firstName"));
 
@@ -133,7 +135,7 @@ public class ViewController implements Initializable {
         );
 
         TableColumn emailCol = new TableColumn("Email cím");
-        emailCol.setMinWidth(200);
+        emailCol.setMinWidth(240);
         emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
         emailCol.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
 
@@ -148,10 +150,46 @@ public class ViewController implements Initializable {
         }
         );
 
-        table.getColumns().addAll(lastNameCol, firstNameCol, emailCol);
+        TableColumn removeCol = new TableColumn("Törlés");
+        //removeCol.setMinWidth(100);
+
+        Callback<TableColumn<Person, String>, TableCell<Person, String>> cellFactory
+                = new Callback<TableColumn<Person, String>, TableCell<Person, String>>() {
+            @Override
+            public TableCell<Person, String> call(TableColumn<Person, String> param) {
+                final TableCell<Person, String> cell = new TableCell<Person, String>() {
+                    final Button btn = new Button("Törlés");
+
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                            setText(null);
+                        } else {
+                            btn.setOnAction((ActionEvent event)
+                                    -> {
+                                Person person = getTableView().getItems().get(getIndex());
+                                data.remove(person);
+                                db.removeContact(person);
+                            });
+                            setGraphic(btn);
+                            setText(null);
+                        }
+                    }
+
+                };
+                return cell;
+            }
+
+        };
         
+        removeCol.setCellFactory(cellFactory);
+        
+        table.getColumns().addAll(lastNameCol, firstNameCol, emailCol, removeCol);
+
         data.addAll(db.getAllContacts());
-                
+
         table.setItems(data);
     }
 
@@ -202,17 +240,17 @@ public class ViewController implements Initializable {
             }
         });
     }
-    
+
     private void alert(String text) {
         mainSplit.setDisable(true);
         mainSplit.setOpacity(0.4);
-        
+
         Label label = new Label(text);
         Button alertButton = new Button("OK");
         VBox vbox = new VBox(label, alertButton);
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(8.0);
-        
+
         alertButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -220,9 +258,9 @@ public class ViewController implements Initializable {
                 mainSplit.setOpacity(1);
                 vbox.setVisible(false);
             }
-            
+
         });
-        
+
         anchor.getChildren().add(vbox);
         anchor.setTopAnchor(vbox, 300.0);
         anchor.setLeftAnchor(vbox, 300.0);

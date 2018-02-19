@@ -107,4 +107,16 @@ public class DB {
             System.out.println("" + ex);
         }
     }
+    
+    public void removeContact(Person person) {
+        try {
+        String sql = "delete from contacts where id = ?";
+        PreparedStatement preparedStatement = conn.prepareStatement(sql);
+        preparedStatement.setInt(1, Integer.parseInt(person.getId()));
+        preparedStatement.execute();
+        } catch (SQLException ex) {
+            System.out.println("Valami baj van a contact törlésekor.");
+            System.out.println("" + ex);
+        }
+    }
 }
