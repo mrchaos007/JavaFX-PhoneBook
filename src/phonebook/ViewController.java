@@ -17,8 +17,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -28,8 +31,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 public class ViewController implements Initializable {
 
@@ -49,6 +54,10 @@ public class ViewController implements Initializable {
     Pane contactPane;
     @FXML
     Pane exportPane;
+    @FXML
+    SplitPane mainSplit;
+    @FXML
+    AnchorPane anchor;
     @FXML
     TextField inputExportName;
     @FXML
@@ -73,6 +82,8 @@ public class ViewController implements Initializable {
             inputLastname.clear();
             inputFirstname.clear();
             inputEmail.clear();
+        } else {
+            alert("Adj meg egy valódi e-mail címet!");
         }
     }
 
@@ -83,6 +94,8 @@ public class ViewController implements Initializable {
         if (fileName != null && !fileName.equals("")) {
             PdfGeneration pdfCreator = new PdfGeneration();
             pdfCreator.pdfGeneration(fileName, data);
+        } else {
+            alert("Adj meg egy fájlnevet!");
         }
     }
 
@@ -96,8 +109,9 @@ public class ViewController implements Initializable {
                 new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Person, String> t) {
-                ((Person) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())).setLastName(t.getNewValue());
+                Person actualPerson = (Person) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                actualPerson.setLastName(t.getNewValue());
+                db.updateContact(actualPerson);
             }
         }
         );
@@ -111,8 +125,9 @@ public class ViewController implements Initializable {
                 new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Person, String> t) {
-                ((Person) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())).setFirstName(t.getNewValue());
+                Person actualPerson = (Person) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                actualPerson.setFirstName(t.getNewValue());
+                db.updateContact(actualPerson);
             }
         }
         );
@@ -126,8 +141,9 @@ public class ViewController implements Initializable {
                 new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Person, String> t) {
-                ((Person) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())).setEmail(t.getNewValue());
+                Person actualPerson = (Person) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                actualPerson.setEmail(t.getNewValue());
+                db.updateContact(actualPerson);
             }
         }
         );
@@ -185,6 +201,31 @@ public class ViewController implements Initializable {
                 }
             }
         });
+    }
+    
+    private void alert(String text) {
+        mainSplit.setDisable(true);
+        mainSplit.setOpacity(0.4);
+        
+        Label label = new Label(text);
+        Button alertButton = new Button("OK");
+        VBox vbox = new VBox(label, alertButton);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(8.0);
+        
+        alertButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainSplit.setDisable(false);
+                mainSplit.setOpacity(1);
+                vbox.setVisible(false);
+            }
+            
+        });
+        
+        anchor.getChildren().add(vbox);
+        anchor.setTopAnchor(vbox, 300.0);
+        anchor.setLeftAnchor(vbox, 300.0);
     }
 
     @Override

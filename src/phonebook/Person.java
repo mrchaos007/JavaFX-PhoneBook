@@ -23,6 +23,13 @@ public class Person {
         this.email = new SimpleStringProperty(email);
         this.id = new SimpleStringProperty("");
     }
+    
+    public Person(Integer id, String lastName, String firstName, String email) {
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
+        this.email = new SimpleStringProperty(email);
+        this.id = new SimpleStringProperty(String.valueOf(id));
+    }
 
     public String getFirstName() {
         return firstName.get();
@@ -49,7 +56,7 @@ public class Person {
     }
     
     public String getId() {
-        return email.get();
+        return id.get();
     }
     
     void setId(String id) {

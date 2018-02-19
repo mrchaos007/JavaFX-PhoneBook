@@ -7,13 +7,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="phonebook.ViewController">
+<AnchorPane id="anchor" fx:id="anchor" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="phonebook.ViewController">
     <children>
         <Label layoutX="265.0" layoutY="14.0" minHeight="16" minWidth="69" text="Telefonkönyv">
          <font>
             <Font name="Mongolian Baiti" size="18.0" />
          </font></Label>
-      <SplitPane dividerPositions="0.25752508361204013" layoutY="50.0" prefHeight="600.0" prefWidth="600.0">
+      <SplitPane id="mainSplit" fx:id="mainSplit" dividerPositions="0.25" layoutY="50.0" prefHeight="600.0" prefWidth="600.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>

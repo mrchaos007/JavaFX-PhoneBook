@@ -67,7 +67,8 @@ public class DB {
             ResultSet rs = createStatement.executeQuery(sql);
             contacts = new ArrayList<>();
             while(rs.next()) {
-                Person actualPerson = new Person(rs.getString("lastname"), rs.getString("firstname"), rs.getString("email"));
+                System.out.println(" " + rs.getInt("id") + " " + rs.getString("lastname") + " " + rs.getString("firstname") + " " + rs.getString("email"));
+                Person actualPerson = new Person(rs.getInt("id"), rs.getString("lastname"), rs.getString("firstname"), rs.getString("email"));
                 contacts.add(actualPerson);
             }
         } catch (SQLException ex) {
@@ -94,11 +95,12 @@ public class DB {
     
     public void updateContact(Person person) {
         try {
-            String sql = "update contacts set lastname = ?, firstname = ?, email = ? where";
+            String sql = "update contacts set lastname = ?, firstname = ?, email = ? where id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, person.getLastName());
             preparedStatement.setString(2, person.getFirstName());
             preparedStatement.setString(3, person.getEmail());
+            preparedStatement.setInt(4, Integer.parseInt(person.getId()));
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Valami baj van a contact hozzáadásakor.");
